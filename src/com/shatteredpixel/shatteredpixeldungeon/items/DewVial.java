@@ -26,9 +26,7 @@ import com.watabou.noosa.audio.Sample;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.utils.Utils;
@@ -45,7 +43,7 @@ public class DewVial extends Item {
 	private static final String TXT_VALUE	= "%+dHP";
 	private static final String TXT_STATUS	= "%d/%d";
 
-	private static final String TXT_AUTO_DRINK	= "The dew vial was emptied to heal your wounds.";
+	// private static final String TXT_AUTO_DRINK	= "The dew vial was emptied to heal your wounds.";
 	private static final String TXT_COLLECTED	= "You collected a dewdrop into your dew vial.";
 	private static final String TXT_FULL		= "Your dew vial is full!";
 	private static final String TXT_EMPTY		= "Your dew vial is empty!";

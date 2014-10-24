@@ -44,9 +44,10 @@ public class WndSadGhost extends Window {
     private static final String TXT_GIVEITEM=
         "Please take one of these items, they are useless to me now... " +
         "Maybe they will help you in your journey...";
-    private static final String TXT_TotallyNotATeaser=
+    /*private static final String TXT_TotallyNotATeaser=
         "Also... There is an item lost in this dungeon that is very dear to me..." +
         "If you ever... find my... rose......";
+        */
 	private static final String TXT_WEAPON	= "Ghost's weapon";
 	private static final String TXT_ARMOR	= "Ghost's armor";
 	
