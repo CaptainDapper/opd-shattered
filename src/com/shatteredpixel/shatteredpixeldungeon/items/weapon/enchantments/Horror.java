@@ -17,11 +17,9 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
@@ -41,12 +39,9 @@ public class Horror extends Weapon.Enchantment {
 		int level = Math.max( 0, weapon.level );
 		
 		if (Random.Int( level + 5 ) >= 4) {
-
-            if (defender == Dungeon.hero) {
-                Buff.affect( defender, Vertigo.class, Vertigo.duration(defender) );
-            } else {
-                Buff.affect( defender, Terror.class, Terror.DURATION ).source = attacker;
-            }
+			
+			Terror terror = Buff.affect( defender, Terror.class, Terror.DURATION );
+			terror.source = attacker;
 			
 			return true;
 		} else {

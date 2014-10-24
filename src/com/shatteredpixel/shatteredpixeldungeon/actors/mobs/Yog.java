@@ -62,7 +62,7 @@ public class Yog extends Mob {
 		
 		EXP = 50;
 		
-		state = PASSIVE;
+		state = State.PASSIVE;
 	}
 	
 	private static final String TXT_DESC =
@@ -193,7 +193,7 @@ public class Yog extends Mob {
 			
 			EXP = 0;
 			
-			state = WANDERING;
+			state = State.WANDERING;
 		}
 		
 		public RottingFist() {
@@ -286,7 +286,7 @@ public class Yog extends Mob {
 			
 			EXP = 0;
 			
-			state = WANDERING;
+			state = State.WANDERING;
 		}
 		
 		public BurningFist() {
@@ -404,7 +404,7 @@ public class Yog extends Mob {
 			
 			EXP = 0;
 			
-			state = HUNTING;
+			state = State.HUNTING;
 		}
 		
 		@Override

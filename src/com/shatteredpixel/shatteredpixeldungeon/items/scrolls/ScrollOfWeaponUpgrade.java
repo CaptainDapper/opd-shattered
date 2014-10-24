@@ -33,8 +33,6 @@ public class ScrollOfWeaponUpgrade extends InventoryScroll {
 		name = "Scroll of Weapon Upgrade";
 		inventoryTitle = "Select a weapon to upgrade";
 		mode = WndBag.Mode.WEAPON;
-
-        bones = true;
 	}
 	
 	@Override

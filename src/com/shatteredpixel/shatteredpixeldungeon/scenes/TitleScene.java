@@ -17,19 +17,18 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
+import com.opd.noosa.OPDGame;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
-import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Button;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BannerSprites;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Fireball;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
-import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.PrefsButton;
 
 public class TitleScene extends PixelScene {
@@ -48,11 +47,11 @@ public class TitleScene extends PixelScene {
 
         int gameversion = ShatteredPixelDungeon.version();
 
-        if (gameversion != Game.versionCode) {
+        if (gameversion != OPDGame.subVersionCode) {
             //new intro, make older players see it again.
             if (gameversion < 9)
                 ShatteredPixelDungeon.intro(true);
-            Game.switchScene(WelcomeScene.class);
+            OPDGame.switchScene(WelcomeScene.class);
         }
 		
 		Music.INSTANCE.play( Assets.THEME, true );
@@ -81,7 +80,7 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnBadges = new DashboardItem( TXT_BADGES, 3 ) {
 			@Override
 			protected void onClick() {
-                ShatteredPixelDungeon.switchNoFade( BadgesScene.class );
+				OPDGame.switchScene( BadgesScene.class );
 			}
 		};
 		btnBadges.setPos( w / 2 - btnBadges.width(), (h + height) / 2 - DashboardItem.SIZE );
@@ -90,7 +89,7 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnAbout = new DashboardItem( TXT_ABOUT, 1 ) {
 			@Override
 			protected void onClick() {
-                ShatteredPixelDungeon.switchNoFade( AboutScene.class );
+				OPDGame.switchScene( AboutScene.class );
 			}
 		};
 		btnAbout.setPos( w / 2, (h + height) / 2 - DashboardItem.SIZE );
@@ -99,7 +98,7 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnPlay = new DashboardItem( TXT_PLAY, 0 ) {
 			@Override
 			protected void onClick() {
-                ShatteredPixelDungeon.switchNoFade( StartScene.class );
+				OPDGame.switchScene( StartScene.class );
 			}
 		};
 		btnPlay.setPos( w / 2 - btnPlay.width(), btnAbout.top() - DashboardItem.SIZE );
@@ -108,33 +107,29 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnHighscores = new DashboardItem( TXT_HIGHSCORES, 2 ) {
 			@Override
 			protected void onClick() {
-                ShatteredPixelDungeon.switchNoFade( RankingsScene.class );
+				OPDGame.switchScene( RankingsScene.class );
 			}
 		};
 		btnHighscores.setPos( w / 2, btnPlay.top() );
 		add( btnHighscores );
 
-        BitmapText source = new BitmapText( "PD source v 1.7.2a", font1x );
+        BitmapText source = new BitmapText( "PD source v 1.7.1c", font1x );
         source.measure();
         source.hardlight( 0x444444 );
         source.x = w - source.width();
         source.y = h - source.height();
         add( source );
 
-        BitmapText version = new BitmapText( "v " + Game.version + "", font1x );
+        BitmapText version = new BitmapText( "v " + OPDGame.subVersion + "", font1x );
         version.measure();
         version.hardlight( 0xCCCCCC );
         version.x = w - version.width();
         version.y = h - version.height() - source.height();
         add( version );
 		
-		PrefsButton btnPrefs = new PrefsButton();
-		btnPrefs.setPos( 0, 0 );
+        PrefsButton btnPrefs = new PrefsButton();
+		btnPrefs.setPos( w - btnPrefs.width() - 1, 1 );
 		add( btnPrefs );
-
-        ExitButton btnExit = new ExitButton();
-        btnExit.setPos( w - btnExit.width(), 0 );
-        add( btnExit );
 		
 		fadeIn();
 	}

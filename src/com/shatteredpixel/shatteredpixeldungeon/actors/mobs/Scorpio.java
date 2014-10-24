@@ -81,7 +81,7 @@ public class Scorpio extends Mob {
 	
 	@Override
 	protected boolean getCloser( int target ) {
-		if (state == HUNTING) {
+		if (state == State.HUNTING) {
 			return enemySeen && getFurther( target );
 		} else {
 			return super.getCloser( target );

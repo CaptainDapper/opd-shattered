@@ -30,6 +30,8 @@ import com.watabou.utils.Bundle;
 
 public class Poison extends Buff implements Hero.Doom {
 	
+	public static final int DOT	= 2;
+	
 	protected float left;
 	
 	private static final String LEFT	= "left";
@@ -65,7 +67,7 @@ public class Poison extends Buff implements Hero.Doom {
 	public boolean act() {
 		if (target.isAlive()) {
 			
-			target.damage( (int)(left / 3) + 1, this );
+			target.damage( DOT, this );
 			spend( TICK );
 			
 			if ((left -= TICK) <= 0) {

@@ -141,7 +141,6 @@ public class Badges {
 		GAMES_PLAYED_3( "500 games played", 62, true ),
 		GAMES_PLAYED_4( "2000 games played", 63, true ),
 		HAPPY_END( "Happy end", 38 ),
-        CHAMPION( "Challenge won", 39, true ),
 		SUPPORTER( "Thanks for your support!", 31, true );
 		
 		public boolean meta;
@@ -174,7 +173,7 @@ public class Badges {
 		loadGlobal();
 	}
 	
-	private static final String BADGES_FILE	= "badges.dat";
+	private static final String BADGES_FILE	= "shattered-badges.dat";
 	private static final String BADGES		= "badges";
 	
 	private static HashSet<Badge> restore( Bundle bundle ) {
@@ -844,10 +843,6 @@ public class Badges {
 	public static void validateHappyEnd() {
 		displayBadge( Badge.HAPPY_END );
 	}
-
-    public static void validateChampion() {
-        displayBadge(Badge.CHAMPION);
-    }
 	
 	private static void displayBadge( Badge badge ) {
 		

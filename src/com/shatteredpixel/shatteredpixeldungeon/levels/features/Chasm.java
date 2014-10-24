@@ -103,7 +103,8 @@ public class Chasm {
 	}
 
 	public static void mobFall( Mob mob ) {
-		mob.die( null );
+		// Destroy instead of kill to prevent dropping loot
+		mob.destroy();
 		
 		((MobSprite)mob.sprite).fall();
 	}

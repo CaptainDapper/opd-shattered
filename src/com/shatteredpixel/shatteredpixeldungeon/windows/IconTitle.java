@@ -20,11 +20,8 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Component;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
-import com.shatteredpixel.shatteredpixeldungeon.utils.Utils;
 
 public class IconTitle extends Component {
 
@@ -37,13 +34,6 @@ public class IconTitle extends Component {
 	
 	public IconTitle() {
 		super();
-    }
-
-    public IconTitle( Item item ) {
-        this(
-                new ItemSprite( item.image(), item.glowing() ),
-                Utils.capitalize( item.toString() ) );
-
 	}
 	
 	public IconTitle( Image icon, String label ) {

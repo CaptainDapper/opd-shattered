@@ -21,8 +21,6 @@ import java.util.HashSet;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -31,13 +29,13 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.MirrorSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public class MirrorImage extends NPC {
+public class MirrorImage extends Mob.NPC {
 	
 	{
 		name = "mirror image";
 		spriteClass = MirrorSprite.class;
 		
-		state = HUNTING;
+		state = State.HUNTING;
 		
 		enemy = DUMMY;
 	}
@@ -136,16 +134,5 @@ public class MirrorImage extends NPC {
 		
 		Dungeon.hero.spend( 1 / Dungeon.hero.speed() );
 		Dungeon.hero.busy();
-    }
-
-    private static final HashSet<Class<?>> IMMUNITIES = new HashSet<Class<?>>();
-    static {
-        IMMUNITIES.add( ToxicGas.class );
-        IMMUNITIES.add( Burning.class );
-    }
-
-    @Override
-    public HashSet<Class<?>> immunities() {
-        return IMMUNITIES;
 	}
 }

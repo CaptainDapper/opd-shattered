@@ -23,8 +23,6 @@ public class PotionOfExperience extends Potion {
 
 	{
 		name = "Potion of Experience";
-
-        bones = true;
 	}
 	
 	@Override

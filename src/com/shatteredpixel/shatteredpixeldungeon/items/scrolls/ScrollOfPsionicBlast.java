@@ -36,8 +36,6 @@ public class ScrollOfPsionicBlast extends Scroll {
 
 	{
 		name = "Scroll of Psionic Blast";
-
-        bones = true;
 	}
 	
 	@Override

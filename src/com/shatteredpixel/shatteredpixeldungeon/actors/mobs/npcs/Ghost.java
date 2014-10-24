@@ -17,55 +17,51 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import java.util.HashSet;
+
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StenchGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.RatSkull;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.CurareDart;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.LightningTrap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.*;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Journal;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StenchGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
-import com.shatteredpixel.shatteredpixeldungeon.items.quest.RatSkull;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.CurareDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.LightningTrap;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.FetidRatSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollTricksterSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.GreatCrabSprite;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndSadGhost;
-import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-import java.util.HashSet;
-
-public class Ghost extends NPC {
+public class Ghost extends Mob.NPC {
 
 	{
 		name = "sad ghost";
@@ -73,7 +69,7 @@ public class Ghost extends NPC {
 		
 		flying = true;
 		
-		state = WANDERING;
+		state = State.WANDERING;
 	}
 	
 	private static final String TXT_RAT1	=
@@ -202,6 +198,7 @@ public class Ghost extends NPC {
                     txt_quest = TXT_CRAB1; break;
             }
 
+            questBoss.state = Mob.State.WANDERING;
             questBoss.pos = Dungeon.level.randomRespawnCell();
 
             if (questBoss.pos != -1) {
@@ -389,11 +386,9 @@ public class Ghost extends NPC {
 			spriteClass = FetidRatSprite.class;
 			
 			HP = HT = 20;
-			defenseSkill = 5;
+			defenseSkill = 4;
 			
 			EXP = 4;
-
-            state = WANDERING;
 		}
 		
 		@Override
@@ -448,12 +443,10 @@ public class Ghost extends NPC {
             name = "gnoll trickster";
             spriteClass = GnollTricksterSprite.class;
 
-            HP = HT = 20;
-            defenseSkill = 5;
+            HP = HT = 25;
+            defenseSkill = 4;
 
             EXP = 5;
-
-            state = WANDERING;
 
             loot = Generator.random(CurareDart.class);
             lootChance = 1f;
@@ -499,11 +492,42 @@ public class Ghost extends NPC {
         @Override
         protected boolean getCloser( int target ) {
             combo = 0; //if he's moving, he isn't attacking, reset combo.
-            if (state == HUNTING) {
+            if (state == State.HUNTING) {
                 return enemySeen && getFurther( target );
             } else {
                 return super.getCloser( target );
             }
+        }
+
+        @Override
+        //If the gnoll is hit below half, he teleports away to escape!
+        public void damage( int dmg, Object src ){
+            if (HP > 12 && (HP - dmg) <= 12){
+                int count = 10;
+                int pos;
+
+                do {
+                    pos = Dungeon.level.randomRespawnCell();
+                    if (count-- <= 0) {
+                        break;
+                    }
+                } while (pos == -1);
+
+                if (pos != -1) {
+
+                    CellEmitter.get( this.pos ).burst( Speck.factory( Speck.WOOL ), 6 );
+                    Sample.INSTANCE.play( Assets.SND_PUFF );
+
+                    this.pos = pos;
+                    sprite.place( pos );
+                    sprite.visible = Dungeon.visible[pos];
+
+                    GLog.w("The gnoll trickster blinks away!");
+
+                }
+            }
+
+            super.damage(dmg, src);
         }
 
         @Override
@@ -552,10 +576,24 @@ public class Ghost extends NPC {
 
             EXP = 6;
 
-            state = WANDERING;
         }
 
         private boolean moving = true;
+
+        @Override
+        public int damageRoll() {
+            return Random.NormalIntRange( 4, 6 );
+        }
+
+        @Override
+        public int attackSkill( Char target ) {
+            return 13;
+        }
+
+        @Override
+        public int dr() {
+            return 4;
+        }
 
         @Override
         protected boolean getCloser( int target ) {

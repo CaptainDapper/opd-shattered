@@ -17,25 +17,20 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
-import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
-import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlot;
-import com.watabou.noosa.Game;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
+
+import com.watabou.noosa.Game;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 public class Bones {
 
-	private static final String BONES_FILE	= "bones.dat";
+	private static final String BONES_FILE	= "shattered-bones.dat";
 	
 	private static final String LEVEL	= "level";
 	private static final String ITEM	= "item";
@@ -45,8 +40,28 @@ public class Bones {
 	
 	public static void leave() {
 		
-		item = pickItem(Dungeon.hero);
-
+		item = null;
+		switch (Random.Int( 4 )) {
+		case 0:
+			item = Dungeon.hero.belongings.weapon;
+			break;
+		case 1:
+			item = Dungeon.hero.belongings.armor;
+			break;
+		case 2:
+			item = Dungeon.hero.belongings.misc1;
+			break;
+		case 3:
+			item = Dungeon.hero.belongings.misc2;
+			break;
+		}
+		if (item == null) {
+			if (Dungeon.gold > 0) {
+				item = new Gold( Random.IntRange( 1, Dungeon.gold ) );
+			} else {
+				item = new Gold( 1 );
+			}
+		}
 		
 		depth = Dungeon.depth;
 		
@@ -62,56 +77,6 @@ public class Bones {
 
 		}
 	}
-
-    private static Item pickItem(Hero hero){
-        Item item = null;
-        if (Random.Int(2) == 0) {
-            switch (Random.Int(5)) {
-                case 0:
-                    item = hero.belongings.weapon;
-                    break;
-                case 1:
-                    item = hero.belongings.armor;
-                    break;
-                case 2:
-                    item = hero.belongings.misc1;
-                    break;
-                case 3:
-                    item = hero.belongings.misc2;
-                    break;
-                case 4:
-                    item = QuickSlot.getItem();
-                    break;
-            }
-            if (item != null && !item.bones)
-                return pickItem(hero);
-        } else {
-
-            Iterator<Item> iterator = hero.belongings.backpack.iterator();
-            Item curItem;
-            ArrayList<Item> items = new ArrayList<Item>();
-            while (iterator.hasNext()){
-                curItem = iterator.next();
-                if (curItem.bones && !(curItem instanceof EquipableItem))
-                    items.add(curItem);
-            }
-
-            if (!items.isEmpty()) {
-                item = Random.element(items);
-                if (item.stackable){
-                    item.quantity(Random.NormalIntRange(1, (int)Math.sqrt(item.quantity())));
-                }
-            }
-        }
-        if (item == null) {
-            if (Dungeon.gold > 0) {
-                item = new Gold( Random.NormalIntRange( 1, Dungeon.gold ) );
-            } else {
-                item = new Gold( 1 );
-            }
-        }
-        return item;
-    }
 	
 	public static Item get() {
 		if (depth == -1) {
@@ -135,7 +100,7 @@ public class Bones {
 				Game.instance.deleteFile( BONES_FILE );
 				depth = 0;
 				
-				if (item.isUpgradable()) {
+				if (!item.stackable) {
 					item.cursed = true;
 					item.cursedKnown = true;
 					if (item.isUpgradable()) {

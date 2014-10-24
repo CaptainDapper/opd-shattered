@@ -17,9 +17,6 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ui.Button;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -48,9 +45,9 @@ public class ItemSlot extends Button {
 	
 	private static final String TXT_STRENGTH	= ":%d";
 	private static final String TXT_TYPICAL_STR	= "%d?";
-    private static final String TXT_KEY_DEPTH	= "*%d";
 	
 	private static final String TXT_LEVEL	= "%+d";
+	private static final String TXT_CURSED	= "";
 	
 	// Special items for containers
 	public static final Item CHEST = new Item() {
@@ -157,11 +154,8 @@ public class ItemSlot extends Button {
 					
 				}
 				topRight.measure();
-
-			} else if (item instanceof Key && !(item instanceof SkeletonKey)) {
-                topRight.text(Utils.format(TXT_KEY_DEPTH, ((Key) item).depth));
-                topRight.measure();
-            } else {
+				
+			} else {
 				
 				topRight.text( null );
 				
@@ -170,7 +164,7 @@ public class ItemSlot extends Button {
 			int level = item.visiblyUpgraded(); 
 
 			if (level != 0 || (item.cursed && item.cursedKnown)) {
-				bottomRight.text( item.levelKnown ? Utils.format( TXT_LEVEL, level ) : "" );
+				bottomRight.text( item.levelKnown ? Utils.format( TXT_LEVEL, level ) : TXT_CURSED );
 				bottomRight.measure();
 				bottomRight.hardlight( level > 0 ? UPGRADED : DEGRADED );
 			} else {

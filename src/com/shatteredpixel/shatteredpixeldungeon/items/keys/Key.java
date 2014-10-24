@@ -36,6 +36,13 @@ public class Key extends Item {
 		return item.getClass() == getClass() && ((Key)item).depth == depth;
 	}
 	
+	@Override
+	public Item detach( Bag container ) {
+		Key key = (Key)super.detach( container );
+		key.depth = depth;
+		return key;
+	}
+	
 	private static final String DEPTH = "depth";
 	
 	@Override
@@ -59,5 +66,4 @@ public class Key extends Item {
 	public boolean isIdentified() {
 		return true;
 	}
-
 }

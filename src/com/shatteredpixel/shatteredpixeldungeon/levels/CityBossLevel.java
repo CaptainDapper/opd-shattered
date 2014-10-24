@@ -179,7 +179,7 @@ public class CityBossLevel extends Level {
             locked = true;
 			
 			Mob boss = Bestiary.mob( Dungeon.depth );
-			boss.state = boss.HUNTING;
+			boss.state = Mob.State.HUNTING;
 			do {
 				boss.pos = Random.Int( LENGTH );
 			} while (

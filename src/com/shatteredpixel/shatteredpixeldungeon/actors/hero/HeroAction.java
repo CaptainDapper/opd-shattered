@@ -18,7 +18,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 
 
 public class HeroAction {
@@ -50,8 +50,8 @@ public class HeroAction {
 	}
 	
 	public static class Interact extends HeroAction {
-		public NPC npc;
-		public Interact( NPC npc ) {
+		public Mob.NPC npc;
+		public Interact( Mob.NPC npc ) {
 			this.npc = npc;
 		}
 	}

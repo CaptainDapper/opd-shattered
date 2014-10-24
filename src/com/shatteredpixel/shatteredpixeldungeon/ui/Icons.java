@@ -48,10 +48,7 @@ public enum Icons {
 	SCROLL_HOLDER,
 	WAND_HOLSTER,
 	CHECKED,
-	UNCHECKED,
-    EXIT,
-    CHALLENGE_OFF,
-    CHALLENGE_ON;
+	UNCHECKED;
 	
 	public Image get() {
 		return get( this );
@@ -138,15 +135,6 @@ public enum Icons {
 		case UNCHECKED:
 			icon.frame( icon.texture.uvRect( 66, 12, 78, 24 ) );
 			break;
-        case EXIT:
-            icon.frame( icon.texture.uvRect( 98, 0, 114, 16 ) );
-            break;
-        case CHALLENGE_OFF:
-            icon.frame( icon.texture.uvRect( 78, 16, 102, 40 ) );
-            break;
-        case CHALLENGE_ON:
-            icon.frame( icon.texture.uvRect( 102, 16, 126, 40 ) );
-            break;
 		}
 		return icon;
 	}

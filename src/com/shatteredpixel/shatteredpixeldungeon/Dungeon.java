@@ -24,14 +24,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ParalyticGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
-import com.watabou.noosa.Game;
+import com.opd.noosa.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
@@ -131,13 +124,12 @@ public class Dungeon {
 	public static int arcaneStyli;
 	public static boolean dewVial;		// true if the dew vial can be spawned
 	public static int transmutation;	// depth number for a well of transmutation
-
-    public static int challenges;
+	
 
 	public static Hero hero;
 	public static Level level;
 	
-	// Either Item or Class<? extends Item>
+	// Either� Item or Class<? extends Item>
 	public static Object quickslot;
 	
 	public static int depth;
@@ -155,8 +147,6 @@ public class Dungeon {
     public static int version;
 	
 	public static void init() {
-
-        challenges = ShatteredPixelDungeon.challenges();
 
 		Actor.clear();
 		
@@ -195,10 +185,6 @@ public class Dungeon {
 		
 		StartScene.curClass.initHero( hero );
 	}
-
-    public static boolean isChallenged( int mask ) {
-        return (challenges & mask) != 0;
-    }
 	
 	public static Level newLevel() {
 		
@@ -334,22 +320,6 @@ public class Dungeon {
 		if (respawner != null) {
 			Actor.add( level.respawner() );
 		}
-
-        for (Potion potion : level.fallingPotions){
-
-            int cell = level.randomRespawnCell();
-            while (cell == -1)
-                cell = level.randomRespawnCell();
-
-            if (potion instanceof PotionOfLiquidFlame)
-                GameScene.add(Blob.seed(cell, 2, Fire.class));
-            else if (potion instanceof PotionOfToxicGas)
-                GameScene.add( Blob.seed( cell, 1000, ToxicGas.class ) );
-            else if (potion instanceof PotionOfParalyticGas)
-                GameScene.add( Blob.seed( cell, 1000, ParalyticGas.class ) );
-
-        }
-        level.fallingPotions.clear();
 		
 		hero.pos = pos != -1 ? pos : level.exit;
 		
@@ -392,20 +362,19 @@ public class Dungeon {
 		return Random.Int( 12 * (1 + arcaneStyli) ) < depth;
 	}
 	
-	private static final String RG_GAME_FILE	= "game.dat";
-	private static final String RG_DEPTH_FILE	= "depth%d.dat";
+	private static final String RG_GAME_FILE	= "shattered-game.dat";
+	private static final String RG_DEPTH_FILE	= "shattered-depth%d.dat";
 	
-	private static final String WR_GAME_FILE	= "warrior.dat";
-	private static final String WR_DEPTH_FILE	= "warrior%d.dat";
+	private static final String WR_GAME_FILE	= "shattered-warrior.dat";
+	private static final String WR_DEPTH_FILE	= "shattered-warrior%d.dat";
 	
-	private static final String MG_GAME_FILE	= "mage.dat";
-	private static final String MG_DEPTH_FILE	= "mage%d.dat";
+	private static final String MG_GAME_FILE	= "shattered-mage.dat";
+	private static final String MG_DEPTH_FILE	= "shattered-mage%d.dat";
 	
-	private static final String RN_GAME_FILE	= "ranger.dat";
-	private static final String RN_DEPTH_FILE	= "ranger%d.dat";
+	private static final String RN_GAME_FILE	= "shattered-ranger.dat";
+	private static final String RN_DEPTH_FILE	= "shattered-ranger%d.dat";
 	
 	private static final String VERSION		= "version";
-    private static final String CHALLENGES	= "challenges";
 	private static final String HERO		= "hero";
 	private static final String GOLD		= "gold";
 	private static final String DEPTH		= "depth";
@@ -450,8 +419,7 @@ public class Dungeon {
 		try {
 			Bundle bundle = new Bundle();
 			
-			bundle.put( VERSION, Game.versionCode );
-            bundle.put( CHALLENGES, challenges );
+			bundle.put( VERSION, OPDGame.subVersionCode );
 			bundle.put( HERO, hero );
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
@@ -494,7 +462,7 @@ public class Dungeon {
 			Badges.saveLocal( badges );
 			bundle.put( BADGES, badges );
 			
-			OutputStream output = Game.instance.openFileOutput( fileName, Game.MODE_PRIVATE );
+			OutputStream output = OPDGame.instance.openFileOutput( fileName, OPDGame.MODE_PRIVATE );
 			Bundle.write( bundle, output );
 			output.close();
 			
@@ -508,8 +476,8 @@ public class Dungeon {
 		Bundle bundle = new Bundle();
 		bundle.put( LEVEL, level );
 		
-		OutputStream output = Game.instance.openFileOutput( 
-			Utils.format( depthFile( hero.heroClass ), depth ), Game.MODE_PRIVATE );
+		OutputStream output = OPDGame.instance.openFileOutput( 
+			Utils.format( depthFile( hero.heroClass ), depth ), OPDGame.MODE_PRIVATE );
 		Bundle.write( bundle, output );
 		output.close();
 	}
@@ -520,8 +488,12 @@ public class Dungeon {
 			Actor.fixTime();
 			saveGame( gameFile( hero.heroClass ) );
 			saveLevel();
-
-            GamesInProgress.set( hero.heroClass, depth, hero.lvl );
+			
+			GamesInProgress.set( 
+				hero.heroClass,
+				depth, 
+				hero.lvl, 
+				hero.belongings.armor != null ? hero.belongings.armor.tier : 0 );
 			
 		} else if (WndResurrect.instance != null) {
 			
@@ -544,8 +516,6 @@ public class Dungeon {
 		Bundle bundle = gameBundle( fileName );
 
         version = bundle.getInt( VERSION );
-
-        Dungeon.challenges = bundle.getInt( CHALLENGES );
 		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
@@ -622,7 +592,7 @@ public class Dungeon {
 		Dungeon.level = null;
 		Actor.clear();
 		
-		InputStream input = Game.instance.openFileInput( Utils.format( depthFile( cl ), depth ) ) ;
+		InputStream input = OPDGame.instance.openFileInput( Utils.format( depthFile( cl ), depth ) ) ;
 		Bundle bundle = Bundle.read( input );
 		input.close();
 		
@@ -631,11 +601,11 @@ public class Dungeon {
 	
 	public static void deleteGame( HeroClass cl, boolean deleteLevels ) {
 		
-		Game.instance.deleteFile( gameFile( cl ) );
+		OPDGame.instance.deleteFile( gameFile( cl ) );
 		
 		if (deleteLevels) {
 			int depth = 1;
-			while (Game.instance.deleteFile( Utils.format( depthFile( cl ), depth ) )) {
+			while (OPDGame.instance.deleteFile( Utils.format( depthFile( cl ), depth ) )) {
 				depth++;
 			}
 		}
@@ -645,7 +615,7 @@ public class Dungeon {
 	
 	public static Bundle gameBundle( String fileName ) throws IOException {
 		
-		InputStream input = Game.instance.openFileInput( fileName );
+		InputStream input = OPDGame.instance.openFileInput( fileName );
 		Bundle bundle = Bundle.read( input );
 		input.close();
 		
@@ -655,7 +625,7 @@ public class Dungeon {
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		info.depth = bundle.getInt( DEPTH );
 		if (info.depth == -1) {
-			info.depth = bundle.getInt( "maxDepth" );	// FIXME
+			info.depth = bundle.getInt( "maxDepth" );	// <-- It has to be refactored!
 		}
 		Hero.preview( info, bundle.getBundle( HERO ) );
 	}
@@ -668,11 +638,6 @@ public class Dungeon {
 	}
 	
 	public static void win( String desc ) {
-
-        if (challenges != 0) {
-            Badges.validateChampion();
-        }
-
 		resultDescription = desc;
 		Rankings.INSTANCE.submit( true );
 	}

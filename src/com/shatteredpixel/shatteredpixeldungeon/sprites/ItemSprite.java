@@ -18,7 +18,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Game;
@@ -140,9 +139,6 @@ public class ItemSprite extends MovieClip {
 			place( from );
 	
 			speed.offset( (px-x) / DROP_INTERVAL, (py-y) / DROP_INTERVAL );
-
-            Log.d( "GAME", toString() );
-            Log.d( "GAME", String.format( "drop aside: %.1f %.1f", speed.x, speed.y ) );
 		}
 	}
 	

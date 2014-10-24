@@ -58,7 +58,6 @@ public class Speck extends Image {
 	public static final int DUST		= 109;
     public static final int STENCH      = 110;
 	public static final int FORGE		= 111;
-    public static final int CONFUSION	= 112;
 	
 	private static final int SIZE = 7;
 	
@@ -101,9 +100,8 @@ public class Speck extends Image {
 		case JET:
 		case TOXIC:
 		case PARALYSIS:
-        case STENCH:
-        case CONFUSION:
 		case DUST:
+        case STENCH:
 			frame( film.get( STEAM ) );
 			break;
 		default:
@@ -276,6 +274,13 @@ public class Speck extends Image {
 			angle = Random.Float( 360 );
 			lifespan = Random.Float( 1f, 3f );
 			break;
+			
+		case DUST:
+			hardlight( 0xFFFF66 );
+			angle = Random.Float( 360 );
+			speed.polar( Random.Float( 2 * 3.1415926f ), Random.Float( 16, 48 ) );
+			lifespan = 0.5f;
+			break;
 
         case STENCH:
             hardlight( 0x003300 );
@@ -283,22 +288,8 @@ public class Speck extends Image {
             angle = Random.Float( 360 );
             lifespan = Random.Float( 1f, 3f );
             break;
-
-        case CONFUSION:
-            hardlight( Random.Int( 0x1000000 ) | 0x000080 );
-            angularSpeed = Random.Float( -20, +20 );
-            angle = Random.Float( 360 );
-            lifespan = Random.Float( 1f, 3f );
-            break;
-
-        case DUST:
-            hardlight( 0xFFFF66 );
-            angle = Random.Float( 360 );
-            speed.polar( Random.Float( 2 * 3.1415926f ), Random.Float( 16, 48 ) );
-            lifespan = 0.5f;
-            break;
-
-        case COIN:
+			
+		case COIN:
 			speed.polar( -PointF.PI * Random.Float( 0.3f, 0.7f ), Random.Float( 48, 96 ) );
 			acc.y = 256;
 			lifespan = -speed.y / acc.y * 2;
@@ -398,7 +389,6 @@ public class Speck extends Image {
 			case STEAM:
 			case TOXIC:
 			case PARALYSIS:
-            case CONFUSION:
 			case DUST:
 				am = p < 0.5f ? p : 1 - p;
 				scale.set( 1 + p * 2 );
@@ -422,30 +412,22 @@ public class Speck extends Image {
 			}
 		}
 	}
-
-    public static Emitter.Factory factory( final int type ) {
-        return factory( type, false );
-    }
-
-    public static Emitter.Factory factory( final int type, final boolean lightMode ) {
-
-        Emitter.Factory factory = factories.get( type );
-
-        if (factory == null) {
-            factory = new Emitter.Factory() {
-                @Override
-                public void emit ( Emitter emitter, int index, float x, float y ) {
-                    Speck p = (Speck)emitter.recycle( Speck.class );
-                    p.reset( index, x, y, type );
-                }
-                @Override
-                public boolean lightMode() {
-                    return lightMode;
-                }
-            };
-            factories.put( type, factory );
-        }
-
-        return factory;
-    }
+	
+	public static Emitter.Factory factory( final int type ) {
+		
+		Emitter.Factory factory = factories.get( type );
+		
+		if (factory == null) {
+			factory = new Emitter.Factory() {
+				@Override
+				public void emit ( Emitter emitter, int index, float x, float y ) {
+					Speck p = (Speck)emitter.recycle( Speck.class );
+					p.reset( index, x, y, type );
+				}
+			};
+			factories.put( type, factory );
+		}
+		
+		return factory;
+	}
 }
