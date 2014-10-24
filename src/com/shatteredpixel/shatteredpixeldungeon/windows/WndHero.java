@@ -19,6 +19,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import java.util.Locale;
 
+import com.opd.noosa.OPDScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.gltextures.SmartTexture;
@@ -104,6 +105,8 @@ public class WndHero extends WndTabbed {
 		
 		public StatsTab() {
 			
+			OPDScene.displayVersion(this, WIDTH, 0);
+			
 			Hero hero = Dungeon.hero;
 
             IconTitle title = new IconTitle();
@@ -112,7 +115,7 @@ public class WndHero extends WndTabbed {
             title.color(Window.SHPX_COLOR);
             title.setRect( 0, 0, WIDTH, 0 );
 			add(title);
-
+			
 			RedButton btnCatalogus = new RedButton( TXT_CATALOGUS ) {
 				@Override
 				protected void onClick() {

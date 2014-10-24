@@ -865,7 +865,7 @@ public class Badges {
 				GLog.h( "New super badge: %s", badge.description );
 			} else {
 				GLog.h( "New badge: %s", badge.description );
-			}	
+			}
 			PixelScene.showBadge( badge );
 		}
 	}

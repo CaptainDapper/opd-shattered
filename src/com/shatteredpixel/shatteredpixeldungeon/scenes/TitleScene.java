@@ -112,7 +112,18 @@ public class TitleScene extends PixelScene {
 		};
 		btnHighscores.setPos( w / 2, btnPlay.top() );
 		add( btnHighscores );
-
+		
+        PrefsButton btnPrefs = new PrefsButton();
+		btnPrefs.setPos( w - btnPrefs.width() - 1, 1 );
+		add( btnPrefs );
+		
+		displayVersion(w, h);
+		
+		fadeIn();
+	}
+	
+	@Override
+	protected void displayVersion(int w, int h) {
         BitmapText source = new BitmapText( "PD source v 1.7.1c", font1x );
         source.measure();
         source.hardlight( 0x444444 );
@@ -120,18 +131,7 @@ public class TitleScene extends PixelScene {
         source.y = h - source.height();
         add( source );
 
-        BitmapText version = new BitmapText( "v " + OPDGame.subVersion + "", font1x );
-        version.measure();
-        version.hardlight( 0xCCCCCC );
-        version.x = w - version.width();
-        version.y = h - version.height() - source.height();
-        add( version );
-		
-        PrefsButton btnPrefs = new PrefsButton();
-		btnPrefs.setPos( w - btnPrefs.width() - 1, 1 );
-		add( btnPrefs );
-		
-		fadeIn();
+		super.displayVersion(w, (int)source.y);
 	}
 	
 	private void placeTorch( float x, float y ) {
