@@ -1,17 +1,12 @@
 //TODO: update this class with relevant info as new versions come out.
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
-import android.content.Intent;
-import android.net.Uri;
 
-import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
+import com.opd.noosa.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndChanges;
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.Camera;
-import com.watabou.noosa.Game;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 
@@ -72,7 +67,7 @@ public class WelcomeScene extends PixelScene {
             text = createMultiline(TXT_SameVer, 6 );
             title = createMultiline(TTL_SameVer, 12 );
 
-        } else if (gameversion <= Game.versionCode) {
+        } else if (gameversion <= OPDGame.subVersionCode) {
 
             text = createMultiline(TXT_LastVer, 6 );
             title = createMultiline(TTL_LastVer, 12 );
@@ -103,8 +98,8 @@ public class WelcomeScene extends PixelScene {
         RedButton okay = new RedButton("Okay!") {
             @Override
             protected void onClick() {
-                ShatteredPixelDungeon.version(Game.versionCode);
-                Game.switchScene(TitleScene.class);
+                ShatteredPixelDungeon.version(OPDGame.subVersionCode);
+                OPDGame.switchScene(TitleScene.class);
             }
         };
 

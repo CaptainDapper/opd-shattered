@@ -21,6 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES20;
 
+import com.opd.noosa.OPDScene;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.watabou.input.Touchscreen;
 import com.watabou.noosa.BitmapText;
@@ -30,14 +31,13 @@ import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Game;
-import com.watabou.noosa.Scene;
 import com.watabou.noosa.Visual;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BadgeBanner;
 import com.watabou.utils.BitmapCache;
 
-public class PixelScene extends Scene {
+public class PixelScene extends OPDScene {
 	
 	public static final float MIN_WIDTH	= 128;
 	public static final float MIN_HEIGHT	= 224;

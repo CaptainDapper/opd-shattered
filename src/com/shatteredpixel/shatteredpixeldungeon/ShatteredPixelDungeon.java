@@ -17,150 +17,15 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon;
 
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
-
-import com.watabou.noosa.Game;
-import com.watabou.noosa.audio.Music;
-import com.watabou.noosa.audio.Sample;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.opd.noosa.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 
-public class ShatteredPixelDungeon extends Game {
+public class ShatteredPixelDungeon extends OPDGame {
 	
 	public ShatteredPixelDungeon() {
 		super( TitleScene.class );
 		/*
 		No Aliases needed here atm, all previous aliases were from original PD, don't need to support saves from there.
 		*/
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	protected void onCreate( Bundle savedInstanceState ) {
-		super.onCreate(savedInstanceState);
-		
-	/*	if (android.os.Build.VERSION.SDK_INT >= 19) {
-			getWindow().getDecorView().setSystemUiVisibility( 
-				View.SYSTEM_UI_FLAG_LAYOUT_STABLE | 
-				View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | 
-				View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | 
-				View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | 
-				View.SYSTEM_UI_FLAG_FULLSCREEN | 
-				View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY );
-		}*/
-		
-		Display display = instance.getWindowManager().getDefaultDisplay();
-		boolean landscape = display.getWidth() > display.getHeight();
-		
-		if (Preferences.INSTANCE.getBoolean( Preferences.KEY_LANDSCAPE, false ) != landscape) {
-			landscape( !landscape );
-		}
-		
-		Music.INSTANCE.enable( music() );
-		Sample.INSTANCE.enable( soundFx() );
-	}
-	
-	/*
-	 * ---> Prefernces
-	 */
-	
-	public static void landscape( boolean value ) {
-		Game.instance.setRequestedOrientation( value ?
-			ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
-			ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
-		Preferences.INSTANCE.put( Preferences.KEY_LANDSCAPE, value );
-	}
-	
-	public static boolean landscape() {
-		return width > height;
-	}
-	
-	public static void scaleUp( boolean value ) {
-		Preferences.INSTANCE.put( Preferences.KEY_SCALE_UP, value );
-		switchScene( TitleScene.class );
-	}
-	
-	public static boolean scaleUp() {
-		return Preferences.INSTANCE.getBoolean( Preferences.KEY_SCALE_UP, true );
-	}
-
-	public static void zoom( int value ) {
-		Preferences.INSTANCE.put( Preferences.KEY_ZOOM, value );
-	}
-	
-	public static int zoom() {
-		return Preferences.INSTANCE.getInt( Preferences.KEY_ZOOM, 0 );
-	}
-	
-	public static void music( boolean value ) {
-		Music.INSTANCE.enable( value );
-		Preferences.INSTANCE.put( Preferences.KEY_MUSIC, value );
-	}
-	
-	public static boolean music() {
-		return Preferences.INSTANCE.getBoolean( Preferences.KEY_MUSIC, true );
-	}
-	
-	public static void soundFx( boolean value ) {
-		Sample.INSTANCE.enable( value );
-		Preferences.INSTANCE.put( Preferences.KEY_SOUND_FX, value );
-	}
-	
-	public static boolean soundFx() {
-		return Preferences.INSTANCE.getBoolean( Preferences.KEY_SOUND_FX, true );
-	}
-	
-	public static void brightness( boolean value ) {
-		Preferences.INSTANCE.put( Preferences.KEY_BRIGHTNESS, value );
-		if (scene() instanceof GameScene) {
-			((GameScene)scene()).brightness( value );
-		}
-	}
-	
-	public static boolean brightness() {
-		return Preferences.INSTANCE.getBoolean( Preferences.KEY_BRIGHTNESS, false );
-	}
-	
-	public static void donated( String value ) {
-		Preferences.INSTANCE.put( Preferences.KEY_DONATED, value );
-	}
-	
-	public static String donated() {
-		return Preferences.INSTANCE.getString( Preferences.KEY_DONATED, "" );
-	}
-	
-	public static void lastClass( int value ) {
-		Preferences.INSTANCE.put( Preferences.KEY_LAST_CLASS, value );
-	}
-	
-	public static int lastClass() {
-		return Preferences.INSTANCE.getInt( Preferences.KEY_LAST_CLASS, 0 );
-	}
-	
-	public static void intro( boolean value ) {
-		Preferences.INSTANCE.put( Preferences.KEY_INTRO, value );
-	}
-	
-	public static boolean intro() {
-		return Preferences.INSTANCE.getBoolean( Preferences.KEY_INTRO, true );
-	}
-
-    public static void version( int value)  {
-        Preferences.INSTANCE.put( Preferences.KEY_VERSION, value );
-    }
-
-    public static int version() {
-        return Preferences.INSTANCE.getInt( Preferences.KEY_VERSION, 0 );
-    }
-	
-	/*
-	 * <--- Preferences
-	 */
-	
-	public static void reportException( Exception e ) {
-		Log.e( "PD", Log.getStackTraceString( e ) ); 
 	}
 }
