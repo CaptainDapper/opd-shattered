@@ -201,7 +201,7 @@ public class CavesBossLevel extends Level {
 			do {
 				pos = Random.IntRange( ROOM_LEFT, ROOM_RIGHT ) + Random.IntRange( ROOM_TOP + 1, ROOM_BOTTOM ) * WIDTH;
 			} while (pos == entrance || map[pos] == Terrain.SIGN);
-			drop( item, pos ).type = Heap.Type.SKELETON;
+			drop( item, pos ).type = Heap.Type.REMAINS;
 		}
 	}
 	
@@ -221,7 +221,7 @@ public class CavesBossLevel extends Level {
             locked = true;
 			
 			Mob boss = Bestiary.mob( Dungeon.depth );
-			boss.state = Mob.State.HUNTING;
+			boss.state = boss.HUNTING;
 			do {
 				boss.pos = Random.Int( LENGTH );
 			} while (

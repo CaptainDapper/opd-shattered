@@ -142,6 +142,7 @@ public class Badges {
 		GAMES_PLAYED_3( "500 games played", 62, true ),
 		GAMES_PLAYED_4( "2000 games played", 63, true ),
 		HAPPY_END( "Happy end", 38 ),
+        CHAMPION( "Challenge won", 39, true ),
 		SUPPORTER( "Thanks for your support!", 31, true );
 		
 		public boolean meta;
@@ -708,7 +709,7 @@ public class Badges {
 		}
 	}
 
-    //TODO: Replace this badge, Delayed to 0.2.1
+    //TODO: Replace this badge, Delayed to 0.2.3, for real this time
 	public static void validateRingOfHaggler() {
 		if (!local.contains( Badge.RING_OF_HAGGLER )/* && new RingOfThorns().isKnown()*/) {
 			Badge badge = Badge.RING_OF_HAGGLER;
@@ -717,7 +718,7 @@ public class Badges {
 		}
 	}
 
-    //TODO: Replace this badge, Delayed to 0.2.1
+    //TODO: Replace this badge, Delayed to 0.2.3, for real this time
 	public static void validateRingOfThorns() {
 		if (!local.contains( Badge.RING_OF_THORNS )/* && new RingOfThorns().isKnown()*/) {
 			Badge badge = Badge.RING_OF_THORNS;
@@ -844,6 +845,10 @@ public class Badges {
 	public static void validateHappyEnd() {
 		displayBadge( Badge.HAPPY_END );
 	}
+
+    public static void validateChampion() {
+        displayBadge(Badge.CHAMPION);
+    }
 	
 	private static void displayBadge( Badge badge ) {
 		

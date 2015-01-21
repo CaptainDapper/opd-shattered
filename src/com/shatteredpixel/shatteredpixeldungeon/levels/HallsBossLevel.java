@@ -150,7 +150,7 @@ public class HallsBossLevel extends Level {
 			do {
 				pos = Random.IntRange( ROOM_LEFT, ROOM_RIGHT ) + Random.IntRange( ROOM_TOP + 1, ROOM_BOTTOM ) * WIDTH;
 			} while (pos == entrance || map[pos] == Terrain.SIGN);
-			drop( item, pos ).type = Heap.Type.SKELETON;
+			drop( item, pos ).type = Heap.Type.REMAINS;
 		}
 	}
 	
@@ -238,8 +238,6 @@ public class HallsBossLevel extends Level {
 		switch (tile) {
 		case Terrain.WATER:
 			return "It looks like lava, but it's cold and probably safe to touch.";
-		case Terrain.EMPTY_DECO:
-			return "Candles on the floor are probably remains of some ritual that took place here.";
 		case Terrain.STATUE:
 		case Terrain.STATUE_SP:
 			return "The pillar is made of real humanoid skulls. Awesome."; 

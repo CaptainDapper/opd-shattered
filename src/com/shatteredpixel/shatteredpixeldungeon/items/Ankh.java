@@ -46,7 +46,11 @@ public class Ankh extends Item {
     {
 		name = "Ankh";
 		image = ItemSpriteSheet.ANKH;
-	}
+
+        //You tell the ankh no, don't revive me, and then it comes back to revive you again in another run.
+        //I'm not sure if that's enthusiasm or passive-aggression.
+        bones = true;
+    }
 
     private Boolean blessed = false;
 	
@@ -64,7 +68,7 @@ public class Ankh extends Item {
     public ArrayList<String> actions( Hero hero ) {
         ArrayList<String> actions = super.actions(hero);
         DewVial vial = hero.belongings.getItem(DewVial.class);
-        if (vial != null && vial.isFull())
+        if (vial != null && vial.isFull() && !blessed)
             actions.add( AC_BLESS );
         return actions;
     }

@@ -125,12 +125,17 @@ public abstract class Wand extends KindOfWeapon {
 		calculateDamage();
 		
 		try {
-			image = handler.image( this );
-			wood = handler.label( this );
+            syncVisuals();
 		} catch (Exception e) {
 			// Wand of Magic Missile
 		}
 	}
+
+    @Override
+    public void syncVisuals(){
+        image = handler.image( this );
+        wood = handler.label( this );
+    }
 	
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
@@ -146,9 +151,9 @@ public abstract class Wand extends KindOfWeapon {
 	}
 	
 	@Override
-	public boolean doUnequip( Hero hero, boolean collect ) {
-		charger.detach();
-		return super.doUnequip(hero, collect);
+	public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
+        onDetach();
+        return super.doUnequip( hero, collect, single );
 	}
 	
 	@Override
@@ -188,17 +193,10 @@ public abstract class Wand extends KindOfWeapon {
 	public void charge( Char owner ) {
 		(charger = new Charger()).attachTo( owner );
 	}
-	
-	@Override
-	public Item detach( Bag container ) {
-		stopCharging();
-		return super.detach( container );
-	}
 
     @Override
-    public Item detachAll( Bag container) {
+    public void onDetach( ) {
         stopCharging();
-        return super.detachAll( container );
     }
 
 	public void stopCharging() {

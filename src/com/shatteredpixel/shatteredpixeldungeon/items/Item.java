@@ -17,11 +17,6 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-import com.watabou.noosa.audio.Sample;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -40,9 +35,14 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlot;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.utils.Utils;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Item implements Bundlable {
 
@@ -76,6 +76,9 @@ public class Item implements Bundlable {
 	
 	// Unique items persist through revival
 	public boolean unique = false;
+
+    // whether an item can be included in heroes remains
+    public boolean bones = false;
 	
 	private static Comparator<Item> itemComparator = new Comparator<Item>() {	
 		@Override
@@ -108,8 +111,12 @@ public class Item implements Bundlable {
 		hero.spendAndNext( TIME_TO_DROP );			
 		Dungeon.level.drop( detachAll( hero.belongings.backpack ), hero.pos ).sprite.drop( hero.pos );	
 	}
-	
-	public void doThrow( Hero hero ) {
+
+    public void syncVisuals(){
+        //do nothing by default, as most items need no visual syncing.
+    }
+
+    public void doThrow( Hero hero ) {
 		GameScene.selectCell( thrower );
 	}
 	
@@ -187,7 +194,7 @@ public class Item implements Bundlable {
 		return collect( Dungeon.hero.belongings.backpack );
 	}
 	
-	public Item detach( Bag container ) {
+	public final Item detach( Bag container ) {
 		
 		if (quantity <= 0) {
 			
@@ -203,28 +210,37 @@ public class Item implements Bundlable {
 			quantity--;
 			updateQuickslot();
 			
-			try { 
-				return getClass().newInstance();
+			try {
+
+                //pssh, who needs copy constructors?
+                Item detached = getClass().newInstance();
+                Bundle copy = new Bundle();
+                this.storeInBundle(copy);
+                detached.restoreFromBundle(copy);
+                detached.quantity(1);
+
+                detached.onDetach( );
+                return detached;
 			} catch (Exception e) {
 				return null;
 			}
 		}
 	}
 	
-	public Item detachAll( Bag container ) {
-		for (Item item : container.items) {
-			if (item == this) {
-				container.items.remove( this );
-				QuickSlot.refresh();
-				return this;
-			} else if (item instanceof Bag) {
-				Bag bag = (Bag)item;
-				if (bag.contains( this )) {
-					detachAll( bag );
-					return this;
-				}
-			}
-		}
+	public final Item detachAll( Bag container ) {
+        for (Item item : container.items) {
+            if (item == this) {
+                container.items.remove( this );
+                item.onDetach( );
+                QuickSlot.refresh();
+                return this;
+            } else if (item instanceof Bag) {
+                Bag bag = (Bag)item;
+                if (bag.contains( this )) {
+                    return detachAll( bag );
+                }
+            }
+        }
 		
 		return this;
 	}
@@ -232,6 +248,8 @@ public class Item implements Bundlable {
 	public boolean isSimilar( Item item ) {
 		return getClass() == item.getClass();
 	}
+
+    protected void onDetach(){}
 	
 	public Item upgrade() {
 		
@@ -428,7 +446,7 @@ public class Item implements Bundlable {
 		float delay = TIME_TO_THROW;
 		if (this instanceof MissileWeapon) {
 
-			// Refactoring needed!
+			// FIXME
 			delay *= ((MissileWeapon)this).speedFactor( user );
 			if (enemy != null && enemy.buff( SnipersMark.class ) != null) {
 				delay *= 0.5f;

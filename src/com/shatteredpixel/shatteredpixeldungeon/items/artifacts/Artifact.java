@@ -1,6 +1,5 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
  * Created by Evan on 24/08/2014.
  */
 public class Artifact extends KindofMisc {
-//TODO: add artifact transform method and tie it into well of transformation, scheduled for 0.2.2
+//TODO: add artifact transform method and tie it into well of transformation, scheduled for 0.2.3
     {
         levelKnown = true;
     }
@@ -97,7 +96,8 @@ public class Artifact extends KindofMisc {
     }
 
     @Override
-    public boolean doUnequip( Hero hero, boolean collect ) {
+    public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
+        if (super.doUnequip( hero, collect, single )) {
 
         if (hero.belongings.misc1 == this) {
             hero.belongings.misc1 = null;
@@ -108,13 +108,13 @@ public class Artifact extends KindofMisc {
         passiveBuff.detach();
         passiveBuff = null;
 
-        hero.spendAndNext( TIME_TO_EQUIP );
-
-        if (collect && !collect( hero.belongings.backpack )) {
-            Dungeon.level.drop( this, hero.pos );
-        }
-
         return true;
+
+        } else {
+
+            return false;
+
+        }
     }
 
     @Override

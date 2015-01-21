@@ -56,7 +56,8 @@ public class Heap implements Bundlable {
 		LOCKED_CHEST, 
 		CRYSTAL_CHEST,
 		TOMB, 
-		SKELETON
+		SKELETON,
+        REMAINS
 	}
 	public Type type = Type.HEAP;
 	
@@ -81,6 +82,8 @@ public class Heap implements Bundlable {
 			return ItemSpriteSheet.TOMB;
 		case SKELETON:
 			return ItemSpriteSheet.BONES;
+        case REMAINS:
+            return ItemSpriteSheet.REMAINS;
 		default:
 			return 0;
 		}
@@ -96,6 +99,7 @@ public class Heap implements Bundlable {
 			Wraith.spawnAround( hero.pos );
 			break;
 		case SKELETON:
+        case REMAINS:
 			CellEmitter.center( pos ).start( Speck.factory( Speck.RATTLE ), 0.1f, 3 );
 			for (Item item : items) {
 				if (item.cursed) {
@@ -341,7 +345,7 @@ public class Heap implements Bundlable {
 	public void restoreFromBundle( Bundle bundle ) {
 		pos = bundle.getInt( POS );
 		type = Type.valueOf( bundle.getString( TYPE ) );
-		items = new LinkedList<Item>( (Collection<? extends Item>) bundle.getCollection( ITEMS ) );
+        items = new LinkedList<Item>( (Collection<Item>) ((Collection<?>) bundle.getCollection( ITEMS )) );
         items.removeAll(Collections.singleton(null));
 	}
 

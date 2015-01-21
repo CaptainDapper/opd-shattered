@@ -19,6 +19,7 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
@@ -80,7 +81,7 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnBadges = new DashboardItem( TXT_BADGES, 3 ) {
 			@Override
 			protected void onClick() {
-				OPDGame.switchScene( BadgesScene.class );
+                ShatteredPixelDungeon.switchNoFade( BadgesScene.class );
 			}
 		};
 		btnBadges.setPos( w / 2 - btnBadges.width(), (h + height) / 2 - DashboardItem.SIZE );
@@ -89,7 +90,7 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnAbout = new DashboardItem( TXT_ABOUT, 1 ) {
 			@Override
 			protected void onClick() {
-				OPDGame.switchScene( AboutScene.class );
+                ShatteredPixelDungeon.switchNoFade( AboutScene.class );
 			}
 		};
 		btnAbout.setPos( w / 2, (h + height) / 2 - DashboardItem.SIZE );
@@ -98,7 +99,7 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnPlay = new DashboardItem( TXT_PLAY, 0 ) {
 			@Override
 			protected void onClick() {
-				OPDGame.switchScene( StartScene.class );
+                ShatteredPixelDungeon.switchNoFade( StartScene.class );
 			}
 		};
 		btnPlay.setPos( w / 2 - btnPlay.width(), btnAbout.top() - DashboardItem.SIZE );
@@ -107,7 +108,7 @@ public class TitleScene extends PixelScene {
 		DashboardItem btnHighscores = new DashboardItem( TXT_HIGHSCORES, 2 ) {
 			@Override
 			protected void onClick() {
-				OPDGame.switchScene( RankingsScene.class );
+                ShatteredPixelDungeon.switchNoFade( RankingsScene.class );
 			}
 		};
 		btnHighscores.setPos( w / 2, btnPlay.top() );
@@ -124,7 +125,7 @@ public class TitleScene extends PixelScene {
 	
 	@Override
 	protected void displayVersion(int w, int h) {
-        BitmapText source = new BitmapText( "PD source v 1.7.1c", font1x );
+        BitmapText source = new BitmapText( "PD source v 1.7.2a", font1x );
         source.measure();
         source.hardlight( 0x444444 );
         source.x = w - source.width();

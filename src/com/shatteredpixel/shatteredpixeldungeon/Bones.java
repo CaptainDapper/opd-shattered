@@ -17,17 +17,22 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon;
 
+import com.watabou.noosa.Game;
+import com.opd.opdlib.OPDGame;
+
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlot;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import com.watabou.noosa.Game;
-import com.opd.opdlib.OPDGame;
-import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Bones {
 
@@ -40,36 +45,21 @@ public class Bones {
 	private static Item item;
 	
 	public static void leave() {
-		
-		item = null;
-		switch (Random.Int( 4 )) {
-		case 0:
-			item = Dungeon.hero.belongings.weapon;
-			break;
-		case 1:
-			item = Dungeon.hero.belongings.armor;
-			break;
-		case 2:
-			item = Dungeon.hero.belongings.misc1;
-			break;
-		case 3:
-			item = Dungeon.hero.belongings.misc2;
-			break;
-		}
-		if (item == null) {
-			if (Dungeon.gold > 0) {
-				item = new Gold( Random.IntRange( 1, Dungeon.gold ) );
-			} else {
-				item = new Gold( 1 );
-			}
-		}
-		
-		depth = Dungeon.depth;
-		
+
+        depth = Dungeon.depth;
+
+        //heroes which have won the game, who die far above their farthest depth, or who are challenged drop no bones.
+        if (Statistics.amuletObtained || (Statistics.deepestFloor - 5) >= depth || Dungeon.challenges > 0) {
+            depth = -1;
+            return;
+        }
+
+		item = pickItem(Dungeon.hero);
+
 		Bundle bundle = new Bundle();
 		bundle.put( LEVEL, depth );
 		bundle.put( ITEM, item );
-		
+
 		try {
 			OutputStream output = OPDGame.openDatOutput( BONES_FILE, Game.MODE_PRIVATE );
 			Bundle.write( bundle, output );
@@ -78,34 +68,90 @@ public class Bones {
 
 		}
 	}
-	
+
+    private static Item pickItem(Hero hero){
+        Item item = null;
+        if (Random.Int(2) == 0) {
+            switch (Random.Int(5)) {
+                case 0:
+                    item = hero.belongings.weapon;
+                    break;
+                case 1:
+                    item = hero.belongings.armor;
+                    break;
+                case 2:
+                    item = hero.belongings.misc1;
+                    break;
+                case 3:
+                    item = hero.belongings.misc2;
+                    break;
+                case 4:
+                    item = QuickSlot.getItem();
+                    break;
+            }
+            if (item != null && !item.bones)
+                return pickItem(hero);
+        } else {
+
+            Iterator<Item> iterator = hero.belongings.backpack.iterator();
+            Item curItem;
+            ArrayList<Item> items = new ArrayList<Item>();
+            while (iterator.hasNext()){
+                curItem = iterator.next();
+                if (curItem.bones)
+                    items.add(curItem);
+            }
+
+            if (Random.Int(3) < items.size()) {
+                item = Random.element(items);
+                if (item.stackable){
+                    if (item instanceof MissileWeapon){
+                        item.quantity(Random.NormalIntRange(1, item.quantity()));
+                    } else {
+                        item.quantity(Random.NormalIntRange(1, (item.quantity() + 1) / 2));
+                    }
+                }
+            }
+        }
+        if (item == null) {
+            if (Dungeon.gold > 50) {
+                item = new Gold( Random.NormalIntRange( 50, Dungeon.gold ) );
+            } else {
+                item = new Gold( 50 );
+            }
+        }
+        return item;
+    }
+
 	public static Item get() {
 		if (depth == -1) {
-			
+
 			try {
 				InputStream input = OPDGame.openDatInput( BONES_FILE ) ;
 				Bundle bundle = Bundle.read( input );
 				input.close();
-				
+
 				depth = bundle.getInt( LEVEL );
 				item = (Item)bundle.get( ITEM );
-				
+
 				return get();
-				
+
 			} catch (Exception e) {
 				return null;
 			}
-			
+
 		} else {
-			if (depth == Dungeon.depth) {
+            //heroes who are challenged cannot find bones
+			if (depth == Dungeon.depth && Dungeon.challenges == 0) {
 				OPDGame.deleteDatFile( BONES_FILE );
 				depth = 0;
 				
-				if (!item.stackable) {
+				if (item.isUpgradable()) {
 					item.cursed = true;
 					item.cursedKnown = true;
 					if (item.isUpgradable()) {
-						int lvl = (Dungeon.depth - 1) * 3 / 5 + 1;
+                        //gain 1 level every 3.333 floors down plus one additional level.
+						int lvl = 1 + ((Dungeon.depth * 3) / 10);
 						if (lvl < item.level) {
 							item.degrade( item.level - lvl );
 						}
@@ -113,9 +159,7 @@ public class Bones {
 					}
 				}
 				
-				if (item instanceof Ring) {
-					((Ring)item).syncGem();
-				}
+				item.syncVisuals();
 				
 				return item;
 			} else {

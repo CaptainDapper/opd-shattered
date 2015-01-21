@@ -41,7 +41,7 @@ public class Statue extends Mob {
 		spriteClass = StatueSprite.class;
 
 		EXP = 0;
-		state = State.PASSIVE;
+		state = PASSIVE;
 	}
 	
 	private Weapon weapon;
@@ -105,8 +105,8 @@ public class Statue extends Mob {
 	@Override
 	public void damage( int dmg, Object src ) {
 
-		if (state == State.PASSIVE) {
-			state = State.HUNTING;
+		if (state == PASSIVE) {
+			state = HUNTING;
 		}
 		
 		super.damage( dmg, src );
@@ -136,7 +136,7 @@ public class Statue extends Mob {
 	
 	@Override
 	public boolean reset() {
-		state = State.PASSIVE;
+		state = PASSIVE;
 		return true;
 	}
 

@@ -17,11 +17,11 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
-import java.util.ArrayList;
-
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+
+import java.util.ArrayList;
 
 abstract public class ClassArmor extends Armor {
 	
@@ -32,6 +32,8 @@ abstract public class ClassArmor extends Armor {
 		levelKnown = true;
 		cursedKnown = true;
 		defaultAction = special();
+
+        bones = false;
 	}
 	
 	public ClassArmor() {
@@ -85,7 +87,7 @@ abstract public class ClassArmor extends Armor {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		if (hero.HP >= 2 && isEquipped( hero )) {
+		if (hero.HP >= 3 && isEquipped( hero )) {
 			actions.add( special() );
 		}
 		return actions;
@@ -95,7 +97,7 @@ abstract public class ClassArmor extends Armor {
 	public void execute( Hero hero, String action ) {
 		if (action == special()) {
 			
-			if (hero.HP < 2) {
+			if (hero.HP < 3) {
 				GLog.w( TXT_LOW_HEALTH );
 			} else if (!isEquipped( hero )) {
 				GLog.w( TXT_NOT_EQUIPPED );

@@ -17,17 +17,19 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.watabou.noosa.BitmapText;
-import com.watabou.noosa.ui.Button;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.Utils;
+import com.watabou.noosa.BitmapText;
+import com.watabou.noosa.ui.Button;
 
 public class ItemSlot extends Button {
 
@@ -45,9 +47,9 @@ public class ItemSlot extends Button {
 	
 	private static final String TXT_STRENGTH	= ":%d";
 	private static final String TXT_TYPICAL_STR	= "%d?";
-	
+    private static final String TXT_KEY_DEPTH	= "\u007F%d";
+
 	private static final String TXT_LEVEL	= "%+d";
-	private static final String TXT_CURSED	= "";
 	
 	// Special items for containers
 	public static final Item CHEST = new Item() {
@@ -65,6 +67,9 @@ public class ItemSlot extends Button {
 	public static final Item SKELETON = new Item() {
 		public int image() { return ItemSpriteSheet.BONES; };
 	};
+    public static final Item REMAINS = new Item() {
+        public int image() { return ItemSpriteSheet.REMAINS; };
+    };
 	
 	public ItemSlot() {
 		super();
@@ -154,8 +159,11 @@ public class ItemSlot extends Button {
 					
 				}
 				topRight.measure();
-				
-			} else {
+
+			} else if (item instanceof Key && !(item instanceof SkeletonKey)) {
+                topRight.text(Utils.format(TXT_KEY_DEPTH, ((Key) item).depth));
+                topRight.measure();
+            } else {
 				
 				topRight.text( null );
 				
@@ -164,7 +172,7 @@ public class ItemSlot extends Button {
 			int level = item.visiblyUpgraded(); 
 
 			if (level != 0 || (item.cursed && item.cursedKnown)) {
-				bottomRight.text( item.levelKnown ? Utils.format( TXT_LEVEL, level ) : TXT_CURSED );
+				bottomRight.text( item.levelKnown ? Utils.format( TXT_LEVEL, level ) : "" );
 				bottomRight.measure();
 				bottomRight.hardlight( level > 0 ? UPGRADED : DEGRADED );
 			} else {

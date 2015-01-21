@@ -30,7 +30,7 @@ public class MagicalSleep extends Buff {
 
     @Override
     public boolean attachTo( Char target ) {
-        if (super.attachTo( target )) {
+        if (super.attachTo( target ) && !target.immunities().contains(Sleep.class)) {
 
             if (target instanceof Hero)
                 if (target.HP == target.HT) {
@@ -41,7 +41,7 @@ public class MagicalSleep extends Buff {
                     GLog.i("You fall into a deep magical sleep.");
                 }
             else if (target instanceof Mob)
-                ((Mob)target).state = Mob.State.SLEEPING;
+                ((Mob)target).state = ((Mob)target).SLEEPING;
 
             target.paralysed = true;
 

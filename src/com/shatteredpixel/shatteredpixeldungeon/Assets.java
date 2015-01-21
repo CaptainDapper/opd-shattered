@@ -20,16 +20,27 @@ package com.shatteredpixel.shatteredpixeldungeon;
 import com.opd.opdlib.DefaultAssets;
 
 public class Assets extends DefaultAssets {
+
+	public static final String BADGES	= "shattered/badges.png";
 	public static final String BRUTE	= "shattered/brute.png";
 	public static final String BUFFS_SMALL	= "shattered/buffs.png";
 	public static final String CRAB		= "shattered/crab.png";
+
+    public static final String PET		= "shattered/pet.png";
+    
 	public static final String FIREBALL		= "shattered/fireball.png";
 	public static final String GNOLL	= "shattered/gnoll.png";
 	public static final String GOO		= "shattered/goo.png";
+	
 	public static final String ICONS	= "shattered/icons.png";
+	public static final String STATUS	= "shattered/status_pane.png";
+	
 	public static final String ITEMS	= "shattered/items.png";
-	public static final String BUFFS_LARGE	= "shattered/large_buffs.png";
 	public static final String PLANTS	= "shattered/plants.png";
+	
+	public static final String BUFFS_LARGE	= "shattered/large_buffs.png";
+
+	public static final String TILES_HALLS	= "tiles4.png";
 	
 	public static final String RAT		= "shattered/rat.png";
 }

@@ -24,7 +24,19 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
+import com.watabou.noosa.Game;
 import com.opd.opdlib.OPDGame;
+
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ConfusionGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ParalyticGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
+
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
@@ -60,7 +72,6 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.StartScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.Utils;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
-import com.watabou.noosa.Game;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -125,12 +136,13 @@ public class Dungeon {
 	public static int arcaneStyli;
 	public static boolean dewVial;		// true if the dew vial can be spawned
 	public static int transmutation;	// depth number for a well of transmutation
-	
+
+    public static int challenges;
 
 	public static Hero hero;
 	public static Level level;
 	
-	// Either� Item or Class<? extends Item>
+	// Either Item or Class<? extends Item>
 	public static Object quickslot;
 	
 	public static int depth;
@@ -148,6 +160,8 @@ public class Dungeon {
     public static int version;
 	
 	public static void init() {
+
+        challenges = ShatteredPixelDungeon.challenges();
 
 		Actor.clear();
 		
@@ -186,6 +200,10 @@ public class Dungeon {
 		
 		StartScene.curClass.initHero( hero );
 	}
+
+    public static boolean isChallenged( int mask ) {
+        return (challenges & mask) != 0;
+    }
 	
 	public static Level newLevel() {
 		
@@ -321,6 +339,24 @@ public class Dungeon {
 		if (respawner != null) {
 			Actor.add( level.respawner() );
 		}
+
+        for (Potion potion : level.fallingPotions){
+
+            int cell = level.randomRespawnCell();
+            while (cell == -1)
+                cell = level.randomRespawnCell();
+
+            if (potion instanceof PotionOfLiquidFlame)
+                GameScene.add( Blob.seed( cell, 2, Fire.class));
+            else if (potion instanceof PotionOfToxicGas)
+                GameScene.add( Blob.seed( cell, 1000, ToxicGas.class ) );
+            else if (potion instanceof PotionOfParalyticGas)
+                GameScene.add( Blob.seed( cell, 1000, ParalyticGas.class ) );
+            else if (potion instanceof PotionOfLevitation)
+                GameScene.add( Blob.seed( cell, 1000, ConfusionGas.class ) );
+
+        }
+        level.fallingPotions.clear();
 		
 		hero.pos = pos != -1 ? pos : level.exit;
 		
@@ -376,6 +412,7 @@ public class Dungeon {
 	private static final String RN_DEPTH_FILE	= "ranger%d.dat";
 	
 	private static final String VERSION		= "version";
+    private static final String CHALLENGES	= "challenges";
 	private static final String HERO		= "hero";
 	private static final String GOLD		= "gold";
 	private static final String DEPTH		= "depth";
@@ -421,6 +458,7 @@ public class Dungeon {
 			Bundle bundle = new Bundle();
 			
 			bundle.put( VERSION, OPDGame.currentSubGame().versionCode );
+            bundle.put( CHALLENGES, challenges );
 			bundle.put( HERO, hero );
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
@@ -489,12 +527,8 @@ public class Dungeon {
 			Actor.fixTime();
 			saveGame( gameFile( hero.heroClass ) );
 			saveLevel();
-			
-			GamesInProgress.set( 
-				hero.heroClass,
-				depth, 
-				hero.lvl, 
-				hero.belongings.armor != null ? hero.belongings.armor.tier : 0 );
+
+            GamesInProgress.set( hero.heroClass, depth, hero.lvl );
 			
 		} else if (WndResurrect.instance != null) {
 			
@@ -517,6 +551,8 @@ public class Dungeon {
 		Bundle bundle = gameBundle( fileName );
 
         version = bundle.getInt( VERSION );
+
+        Dungeon.challenges = bundle.getInt( CHALLENGES );
 		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
@@ -626,7 +662,7 @@ public class Dungeon {
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		info.depth = bundle.getInt( DEPTH );
 		if (info.depth == -1) {
-			info.depth = bundle.getInt( "maxDepth" );	// <-- It has to be refactored!
+			info.depth = bundle.getInt( "maxDepth" );	// FIXME
 		}
 		Hero.preview( info, bundle.getBundle( HERO ) );
 	}
@@ -639,6 +675,11 @@ public class Dungeon {
 	}
 	
 	public static void win( String desc ) {
+
+        if (challenges != 0) {
+            Badges.validateChampion();
+        }
+
 		resultDescription = desc;
 		Rankings.INSTANCE.submit( true );
 	}

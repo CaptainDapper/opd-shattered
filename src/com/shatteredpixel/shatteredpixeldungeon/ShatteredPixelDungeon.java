@@ -24,8 +24,5 @@ public class ShatteredPixelDungeon extends OPDGame {
 	
 	public ShatteredPixelDungeon() {
 		super( TitleScene.class );
-		/*
-		No Aliases needed here atm, all previous aliases were from original PD, don't need to support saves from there.
-		*/
 	}
 }
