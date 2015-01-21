@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
-import com.opd.noosa.OPDGame;
+import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
@@ -363,17 +363,17 @@ public class Dungeon {
 		return Random.Int( 12 * (1 + arcaneStyli) ) < depth;
 	}
 	
-	private static final String RG_GAME_FILE	= "shattered-game.dat";
-	private static final String RG_DEPTH_FILE	= "shattered-depth%d.dat";
+	private static final String RG_GAME_FILE	= "game.dat";
+	private static final String RG_DEPTH_FILE	= "depth%d.dat";
 	
-	private static final String WR_GAME_FILE	= "shattered-warrior.dat";
-	private static final String WR_DEPTH_FILE	= "shattered-warrior%d.dat";
+	private static final String WR_GAME_FILE	= "warrior.dat";
+	private static final String WR_DEPTH_FILE	= "warrior%d.dat";
 	
-	private static final String MG_GAME_FILE	= "shattered-mage.dat";
-	private static final String MG_DEPTH_FILE	= "shattered-mage%d.dat";
+	private static final String MG_GAME_FILE	= "mage.dat";
+	private static final String MG_DEPTH_FILE	= "mage%d.dat";
 	
-	private static final String RN_GAME_FILE	= "shattered-ranger.dat";
-	private static final String RN_DEPTH_FILE	= "shattered-ranger%d.dat";
+	private static final String RN_GAME_FILE	= "ranger.dat";
+	private static final String RN_DEPTH_FILE	= "ranger%d.dat";
 	
 	private static final String VERSION		= "version";
 	private static final String HERO		= "hero";
@@ -420,7 +420,7 @@ public class Dungeon {
 		try {
 			Bundle bundle = new Bundle();
 			
-			bundle.put( VERSION, OPDGame.subVersionCode );
+			bundle.put( VERSION, OPDGame.currentSubGame().versionCode );
 			bundle.put( HERO, hero );
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
@@ -463,7 +463,7 @@ public class Dungeon {
 			Badges.saveLocal( badges );
 			bundle.put( BADGES, badges );
 			
-			OutputStream output = Game.instance.openFileOutput( fileName, Game.MODE_PRIVATE );
+			OutputStream output = OPDGame.openDatOutput( fileName, Game.MODE_PRIVATE );
 			Bundle.write( bundle, output );
 			output.close();
 			
@@ -477,7 +477,7 @@ public class Dungeon {
 		Bundle bundle = new Bundle();
 		bundle.put( LEVEL, level );
 		
-		OutputStream output = Game.instance.openFileOutput( 
+		OutputStream output = OPDGame.openDatOutput( 
 			Utils.format( depthFile( hero.heroClass ), depth ), Game.MODE_PRIVATE );
 		Bundle.write( bundle, output );
 		output.close();
@@ -593,7 +593,7 @@ public class Dungeon {
 		Dungeon.level = null;
 		Actor.clear();
 		
-		InputStream input = Game.instance.openFileInput( Utils.format( depthFile( cl ), depth ) ) ;
+		InputStream input = OPDGame.openDatInput( Utils.format( depthFile( cl ), depth ) ) ;
 		Bundle bundle = Bundle.read( input );
 		input.close();
 		
@@ -602,11 +602,11 @@ public class Dungeon {
 	
 	public static void deleteGame( HeroClass cl, boolean deleteLevels ) {
 		
-		Game.instance.deleteFile( gameFile( cl ) );
+		OPDGame.deleteDatFile( gameFile( cl ) );
 		
 		if (deleteLevels) {
 			int depth = 1;
-			while (Game.instance.deleteFile( Utils.format( depthFile( cl ), depth ) )) {
+			while (OPDGame.deleteDatFile( Utils.format( depthFile( cl ), depth ) )) {
 				depth++;
 			}
 		}
@@ -616,7 +616,7 @@ public class Dungeon {
 	
 	public static Bundle gameBundle( String fileName ) throws IOException {
 		
-		InputStream input = Game.instance.openFileInput( fileName );
+		InputStream input = OPDGame.openDatInput( fileName );
 		Bundle bundle = Bundle.read( input );
 		input.close();
 		

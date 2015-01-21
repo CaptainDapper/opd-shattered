@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.watabou.noosa.Game;
+import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -30,7 +31,7 @@ import com.watabou.utils.Random;
 
 public class Bones {
 
-	private static final String BONES_FILE	= "shattered-bones.dat";
+	private static final String BONES_FILE	= "bones.dat";
 	
 	private static final String LEVEL	= "level";
 	private static final String ITEM	= "item";
@@ -70,7 +71,7 @@ public class Bones {
 		bundle.put( ITEM, item );
 		
 		try {
-			OutputStream output = Game.instance.openFileOutput( BONES_FILE, Game.MODE_PRIVATE );
+			OutputStream output = OPDGame.openDatOutput( BONES_FILE, Game.MODE_PRIVATE );
 			Bundle.write( bundle, output );
 			output.close();
 		} catch (IOException e) {
@@ -82,7 +83,7 @@ public class Bones {
 		if (depth == -1) {
 			
 			try {
-				InputStream input = Game.instance.openFileInput( BONES_FILE ) ;
+				InputStream input = OPDGame.openDatInput( BONES_FILE ) ;
 				Bundle bundle = Bundle.read( input );
 				input.close();
 				
@@ -97,7 +98,7 @@ public class Bones {
 			
 		} else {
 			if (depth == Dungeon.depth) {
-				Game.instance.deleteFile( BONES_FILE );
+				OPDGame.deleteDatFile( BONES_FILE );
 				depth = 0;
 				
 				if (!item.stackable) {

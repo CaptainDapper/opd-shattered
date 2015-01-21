@@ -17,7 +17,7 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon;
 
-import com.opd.openpixeldungeon.DefaultAssets;
+import com.opd.opdlib.DefaultAssets;
 
 public class Assets extends DefaultAssets {
 	public static final String BRUTE	= "shattered/brute.png";

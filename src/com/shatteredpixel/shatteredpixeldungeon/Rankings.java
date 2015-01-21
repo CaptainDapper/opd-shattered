@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import com.watabou.noosa.Game;
+import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
@@ -37,8 +38,8 @@ public enum Rankings {
 	
 	public static final int TABLE_SIZE	= 6;
 	
-	public static final String RANKINGS_FILE = "shattered-rankings.dat";
-	public static final String DETAILS_FILE = "shattered-game_%d.dat";
+	public static final String RANKINGS_FILE = "rankings.dat";
+	public static final String DETAILS_FILE = "game_%d.dat";
 	
 	public ArrayList<Record> records;
 	public int lastRecord;
@@ -81,7 +82,7 @@ public enum Rankings {
 			}
 			
 			if (removedGame.gameFile.length() > 0) {
-				Game.instance.deleteFile( removedGame.gameFile );
+				OPDGame.deleteDatFile( removedGame.gameFile );
 			}
 		}
 		
@@ -107,7 +108,7 @@ public enum Rankings {
 		bundle.put( TOTAL, totalNumber );
 		
 		try {
-			OutputStream output = Game.instance.openFileOutput( RANKINGS_FILE, Game.MODE_PRIVATE );
+			OutputStream output = OPDGame.openDatOutput( RANKINGS_FILE, Game.MODE_PRIVATE );
 			Bundle.write( bundle, output );
 			output.close();
 		} catch (Exception e) {
@@ -123,7 +124,7 @@ public enum Rankings {
 		records = new ArrayList<Rankings.Record>();
 		
 		try {
-			InputStream input = Game.instance.openFileInput( RANKINGS_FILE );
+			InputStream input = OPDGame.openDatInput( RANKINGS_FILE );
 			Bundle bundle = Bundle.read( input );
 			input.close();
 			

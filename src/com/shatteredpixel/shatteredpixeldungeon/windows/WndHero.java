@@ -19,7 +19,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import java.util.Locale;
 
-import com.opd.noosa.OPDScene;
+import com.opd.opdlib.OPDScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.gltextures.SmartTexture;

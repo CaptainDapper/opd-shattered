@@ -17,7 +17,7 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
-import com.opd.noosa.OPDGame;
+import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
@@ -47,7 +47,7 @@ public class TitleScene extends PixelScene {
 
         int gameversion = ShatteredPixelDungeon.version();
 
-        if (gameversion != OPDGame.subVersionCode) {
+        if (gameversion != OPDGame.currentSubGame().versionCode) {
             //new intro, make older players see it again.
             if (gameversion < 9)
                 ShatteredPixelDungeon.intro(true);

@@ -17,7 +17,7 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon;
 
-import com.opd.noosa.OPDGame;
+import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 
 public class ShatteredPixelDungeon extends OPDGame {

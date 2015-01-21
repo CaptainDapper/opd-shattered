@@ -55,7 +55,7 @@ public class MeleeWeapon extends Weapon {
 	}
 	
 	public Item upgrade( boolean enchant ) {
-		STR--;		
+		STR--;
 		MIN++;
 		MAX += tier;
 		

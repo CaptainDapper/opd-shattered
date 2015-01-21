@@ -19,7 +19,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import java.util.Locale;
 
-import com.opd.noosa.OPDScene;
+import com.opd.opdlib.OPDScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ColorBlock;

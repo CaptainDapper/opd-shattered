@@ -2,7 +2,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 
-import com.opd.noosa.OPDGame;
+import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.watabou.noosa.BitmapTextMultiline;
@@ -67,7 +67,7 @@ public class WelcomeScene extends PixelScene {
             text = createMultiline(TXT_SameVer, 6 );
             title = createMultiline(TTL_SameVer, 12 );
 
-        } else if (gameversion <= OPDGame.subVersionCode) {
+        } else if (gameversion <= OPDGame.currentSubGame().versionCode) {
 
             text = createMultiline(TXT_LastVer, 6 );
             title = createMultiline(TTL_LastVer, 12 );
@@ -98,7 +98,7 @@ public class WelcomeScene extends PixelScene {
         RedButton okay = new RedButton("Okay!") {
             @Override
             protected void onClick() {
-                ShatteredPixelDungeon.version(OPDGame.subVersionCode);
+                ShatteredPixelDungeon.version(OPDGame.currentSubGame().versionCode);
                 OPDGame.switchScene(TitleScene.class);
             }
         };

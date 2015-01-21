@@ -17,7 +17,7 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
-import com.opd.noosa.OPDScene;
+import com.opd.opdlib.OPDScene;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
