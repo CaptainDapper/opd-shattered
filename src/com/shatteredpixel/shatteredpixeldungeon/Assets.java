@@ -21,6 +21,7 @@ import com.opd.opdlib.DefaultAssets;
 
 public class Assets extends DefaultAssets {
 
+	public static final String BANNERS	= "shattered/banners.png";
 	public static final String BADGES	= "shattered/badges.png";
 	public static final String BRUTE	= "shattered/brute.png";
 	public static final String BUFFS_SMALL	= "shattered/buffs.png";
