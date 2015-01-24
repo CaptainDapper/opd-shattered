@@ -20,6 +20,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 import java.io.IOException;
 
 import com.watabou.noosa.Game;
+import com.opd.opdlib.OPDGame;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -111,7 +112,12 @@ public class WndGame extends Window {
 		addButton( new RedButton( TXT_EXIT ) {
 			@Override
 			protected void onClick() {
-				Game.instance.finish();
+				try {
+					Dungeon.saveAll();
+				} catch (IOException e) {
+					//
+				}
+				OPDGame.quitSubGame();
 			}
 		} );
 		

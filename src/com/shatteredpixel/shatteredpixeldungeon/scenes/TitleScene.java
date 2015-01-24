@@ -49,9 +49,6 @@ public class TitleScene extends PixelScene {
         int gameversion = ShatteredPixelDungeon.version();
 
         if (gameversion != OPDGame.currentSubGame().versionCode) {
-            //new intro, make older players see it again.
-            if (gameversion < 9)
-                ShatteredPixelDungeon.intro(true);
             OPDGame.switchScene(WelcomeScene.class);
         }
 		
